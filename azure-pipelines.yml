@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-16.04'
+  
+container: 'rocker/r-ver:3.6.1'  
+
+steps:
+- script: Rscript -e 'R.version'
+  displayName: 'Confirm R version'
+
+- script: Rscript install-packages.R
+  displayName: 'Install packages'
+
+- script: Rscript train-model.R
+  displayName: 'Train model'
+  
+- publish: $(System.DefaultWorkingDirectory)/model.Rd
+  artifact: TrainedModel
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
